@@ -80,12 +80,12 @@ MMAgent 采用分阶段、多 Agent 协作的架构，通过以下四个主要�
 ### 环境要求
 
 - Python 3.12
-- CUDA（如果使用 GPU 加速）
+- GPU * 1, for local embedding model: Alibaba-NLP/gte-multilingual-base, to calculate the similarity
 
 ### 安装依赖
 
 ```bash
-pip install openai python-dotenv pyyaml tiktoken requests
+pip install -r requirements.txt
 ```
 
 ### 配置文件
@@ -103,14 +103,14 @@ chart_num: 2                     # 每个任务生成的图表数量
 
 ## 🚀 使用方法
 
-### 基本用法
+### 基本用法: bash run.sh
 
 ```bash
-python main.py \
-    --key YOUR_API_KEY \
-    --base_url YOUR_BASE_URL \
+python MMAgent/main.py \
+    --key sk-... \
+    --base_url https://api.example.com/v1 \
     --task 2024_C \
-    --model_name gpt-4o \
+    --model_name gpt-4o-mini \
     --method_name MM-Agent
 ```
 
@@ -124,15 +124,6 @@ python main.py \
 | `--method_name` | str | `MM-Agent` | 方法名称（用于输出目录命名） |
 | `--base_url` | str | `None` | 自定义 API 端点 URL（可选） |
 
-### 使用自定义 API 端点
-
-```bash
-python main.py \
-    --key YOUR_API_KEY \
-    --base_url https://your-custom-api-endpoint.com/v1 \
-    --model_name custom-model \
-    --task 2024_C
-```
 
 ## 🔄 工作流程
 
@@ -405,16 +396,3 @@ output/{method_name}/{task}_{timestamp}/
 - `coordinator.memory`: 存储每个任务的完整信息
 - `coordinator.code_memory`: 存储代码结构信息
 - 支持任务间信息传递和依赖关系处理
-
-## 📝 示例
-
-### 运行示例: bash run.sh
-
-```bash
-python MMAgent/main.py \
-    --key sk-... \
-    --base_url https://api.example.com/v1 \
-    --task 2024_C \
-    --model_name gpt-4o-mini \
-    --method_name MM-Agent
-```
